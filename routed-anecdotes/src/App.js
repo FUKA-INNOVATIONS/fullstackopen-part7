@@ -71,6 +71,9 @@ const CreateNew = (props) => {
     info.onReset();
   }
 
+  // 7.6: anekdoottisovellus ja hookit step3
+  // EI aiheuttanut warningia
+
   return (
     <div>
       <h2>create a new anecdote</h2>
