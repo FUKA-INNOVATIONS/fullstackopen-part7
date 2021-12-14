@@ -50,6 +50,7 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -59,6 +60,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    history.push('/created')
   }
 
   return (
@@ -115,15 +117,23 @@ const App = () => {
   const match = useRouteMatch('/anecdotes/:id')
 
   const anecdote = match
+      //? anecdoteById(match.params.id)
       ? anecdotes.find(anecdote => anecdote.id === match.params.id)
       : null
-  console.log('anectore', anecdote)
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
+
+  const notify = (content) => {
+    setNotification(`a new anecdote ${content} created!`)
+    setInterval(() => {
+      setNotification(null)
+    }, 10000)
+  }
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    notify(anecdote.content)
   }
 
   const anecdoteById = (id) =>
@@ -145,6 +155,7 @@ const App = () => {
       <h1>Software anecdotes</h1>
       <Router>
         <Menu />
+        {notification ?? <p>{notification}</p>}
         <Switch>
 
 
