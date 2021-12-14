@@ -7,7 +7,7 @@ const Menu = () => {
   }
   return (
     <div>
-      <Link style={padding} to={'/anectodes'}>Anecdotes</Link>
+      <Link style={padding} to={'/'}>Anecdotes</Link>
       <Link style={padding} to={'/create'}>Create new</Link>
       <Link style={padding} to={'/about'}>About</Link>
     </div>
@@ -18,7 +18,7 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => <li key={anecdote.id} ><a href={`/anecdotes/${anecdote.id}`}>{anecdote.content}</a></li>)}
     </ul>
   </div>
 )
@@ -84,23 +84,40 @@ const CreateNew = (props) => {
 
 }
 
+const Anecdote = ({ anecdote }) => {
+  return (
+      <>
+        <h2>{anecdote.content} by {anecdote.author}</h2>
+        <p>has { anecdote.votes } votes</p>
+        <p>fore more info see <a href={`${anecdote.info}`}>{anecdote.info}</a> </p>
+      </>
+  )
+}
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
       author: 'Jez Humble',
       info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
-      votes: 0,
+      votes: 2,
       id: '1'
     },
     {
       content: 'Premature optimization is the root of all evil',
       author: 'Donald Knuth',
       info: 'http://wiki.c2.com/?PrematureOptimization',
-      votes: 0,
+      votes: 3,
       id: '2'
     }
   ])
+
+  const match = useRouteMatch('/anecdotes/:id')
+
+  const anecdote = match
+      ? anecdotes.find(anecdote => anecdote.id === match.params.id)
+      : null
+  console.log('anectore', anecdote)
 
   const [notification, setNotification] = useState('')
 
@@ -137,6 +154,10 @@ const App = () => {
 
           <Route path={'/about'}>
             <About />
+          </Route>
+
+          <Route path={'/anecdotes/:id'}>
+            <Anecdote anecdote={anecdote} />
           </Route>
 
           <Route path={'/'}>
