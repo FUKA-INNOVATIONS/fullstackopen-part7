@@ -11,9 +11,9 @@ import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { createMessage, resetMessage } from './reducers/notificationReducer'
 import { initPosts, addNewPost } from './reducers/postReducer'
+import { setUser } from './reducers/userReducer'
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const posts = useSelector(state => state.posts)
   const postFormRef = useRef()
   const [postDeleted, setPostDeleted] = useState(false)
@@ -22,12 +22,13 @@ const App = () => {
 
   const dispatch = useDispatch()
   const [ notification ] = useSelector(state => state.notification)
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
   }, [])
@@ -95,7 +96,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.clear()
-    setUser(null)
+    dispatch(setUser(null))
     showMessage('Logged out successfully!', 'success')
   }
 
@@ -108,7 +109,7 @@ const App = () => {
         'loggedBlogappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch(setUser(user))
     } catch (exception) {
       //showMessage('Login failed!', 'error')
       showMessage('login failed', 'error')
