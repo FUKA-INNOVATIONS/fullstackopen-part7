@@ -10,10 +10,11 @@ import Togglable from './components/Togglable'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { createMessage, resetMessage } from './reducers/notificationReducer'
+import { initPosts, addNewPost } from './reducers/postReducer'
 
 const App = () => {
   const [user, setUser] = useState(null)
-  const [posts, setPosts] = useState([])
+  const posts = useSelector(state => state.posts)
   const postFormRef = useRef()
   const [postDeleted, setPostDeleted] = useState(false)
   const [postLiked, setPostLiked] = useState(false)
@@ -42,7 +43,7 @@ const App = () => {
             post.isOwner = (user.username === post.user.username)
           }
         })
-        setPosts(initialPosts)
+        dispatch(initPosts(initialPosts))
       })
     setPostDeleted(false)
     setPostLiked(false)
@@ -60,11 +61,10 @@ const App = () => {
   const addPost = async (newPost) => {
     console.log('addPost called')
     postFormRef.current.toggleVisibility()
-
     try {
       const postCreated = await blogService.create(newPost)
       showMessage(`a new blog ${postCreated.title} by ${postCreated.author} added`, 'success')
-      setPosts(posts.concat(postCreated))
+      dispatch(addNewPost(postCreated))
       setPostsUpdated(true)
     } catch ( exception ) {
       showMessage('Creation of new blog post failed!', 'error')
@@ -94,6 +94,7 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
+    showMessage('Logged out successfully!', 'success')
   }
 
   const handleLogin = async (username, password) => {

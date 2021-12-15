@@ -4,9 +4,11 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 
 import notificationReducer from './reducers/notificationReducer'
+import postReducer from './reducers/postReducer'
 
 const reducer = combineReducers({
-  notification: notificationReducer
+  notification: notificationReducer,
+  posts: postReducer
 })
 
 const store = createStore(
