@@ -68,7 +68,7 @@ const CreateNew = (props) => {
     event.preventDefault()
     content.onReset()
     author.onReset()
-    info.onReset();
+    info.onReset()
   }
 
   // 7.6: anekdoottisovellus ja hookit step3
