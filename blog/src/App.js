@@ -71,12 +71,14 @@ const App = () => {
     }
   }
 
+  // // 7.11: redux, step3: LIKETYS ei vaadi refaktorointia, toimii sellaisenaan!
   const likePost = async (postId, currentLikes) => {
     const likeIncremented = currentLikes + 1
     await axios.put(`/api/posts/${postId}`, { likes: likeIncremented })
     setPostLiked(true)
   }
 
+  // 7.11: redux, step3: POISTO ei vaadi refaktorointia, toimii sellaisenaan!
   const deletePost = async (postId) => {
     const token = user.token
     const config = {
