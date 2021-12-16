@@ -15,6 +15,7 @@ import { initPosts, addNewPost } from './reducers/postReducer'
 import { setUser } from './reducers/userReducer'
 import Users from './components/Users'
 import UserDetail from './components/UserDetail'
+import SinglePost from './components/SinglePost'
 
 const HomeLoggedIn = (props) => {
   return (
@@ -204,6 +205,7 @@ const App = () => {
           />} />
           <Route path={'/users'} element={<Users />} />
           <Route path={'/users/:id'} element={<UserDetail />} />
+          <Route path={'/posts/:id'} element={<SinglePost likePost={likePost} />} />
         </Routes>
         }
 

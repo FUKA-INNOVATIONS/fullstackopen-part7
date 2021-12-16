@@ -25,9 +25,9 @@ const Post = ( { post, deletePost, likePost } ) => {
   return (
 
     <li className={'post'} key={ post.id }>
-      <p className={'post-title'} onClick={toggleVisibility} style={postTitle}>
-        { post.title } <em>by</em> { post.author }
-        <button id={visible ? 'hideDetailsBtn' : 'showDetailsBtn'} style={marginLeft} onClick={toggleVisibility}>{visible ? 'Hide' : 'View'}</button>
+      <p className={'post-title'} style={postTitle}>
+        <a href={`posts/${post.id}`}>{ post.title } <em>by</em> { post.author }</a>
+        <button id={visible ? 'hideDetailsBtn' : 'showDetailsBtn'} style={marginLeft} onClick={toggleVisibility}>{visible ? 'Hide' : 'Qiuck View'}</button>
       </p>
 
 

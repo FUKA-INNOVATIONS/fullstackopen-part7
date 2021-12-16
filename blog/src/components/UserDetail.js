@@ -46,7 +46,7 @@ const UserDetail = props => {
 
         <ul>
         {userPosts.length > 0 &&
-          userPosts.map(post => <li key={post.id}>{post.title}</li>)
+          userPosts.map(post => <li key={post.id}><a href={`/posts/${post.id}`}>{post.title}</a> </li>)
           }
         </ul>
       </div>
