@@ -19,6 +19,12 @@ export const setUser = (user) => {
   }
 }
 
+export const userDetails = userId => {
+  return async dispatch => {
+    //const details = await userService.
+  }
+}
+
 export const getUsers = () => {
   //console.log('getUsers called')
   return async dispatch => {

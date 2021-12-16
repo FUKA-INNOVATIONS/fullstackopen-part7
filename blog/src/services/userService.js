@@ -8,7 +8,10 @@ const getAll = async () => {
 
 }
 
-
+const getDetails = async (userId) => {
+  const response = await axios.get(`${baseUrl}/${userId}`)
+  return response.data
+}
 
 const userService =  { getAll }
 

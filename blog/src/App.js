@@ -14,6 +14,7 @@ import { createMessage, resetMessage } from './reducers/notificationReducer'
 import { initPosts, addNewPost } from './reducers/postReducer'
 import { setUser } from './reducers/userReducer'
 import Users from './components/Users'
+import UserDetail from './components/UserDetail'
 
 const HomeLoggedIn = (props) => {
   return (
@@ -77,17 +78,17 @@ const App = () => {
 
   useEffect(() => {
     blogService
-      .getAll().then(initialPosts => {
+    .getAll().then(initialPosts => {
       // Sort posts by most likes
-        initialPosts.sort((a, b) => {
-          return b.likes - a.likes
-        }).map(post => {
-          if (user !== null) {
-            post.isOwner = (user.username === post.user.username)
-          }
-        })
-        dispatch(initPosts(initialPosts))
+      initialPosts.sort((a, b) => {
+        return b.likes - a.likes
+      }).map(post => {
+        if (user !== null) {
+          post.isOwner = (user.username === post.user.username)
+        }
       })
+      dispatch(initPosts(initialPosts))
+    })
     setPostDeleted(false)
     setPostLiked(false)
     setPostsUpdated(false)
@@ -148,7 +149,7 @@ const App = () => {
         username, password,
       })
       window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
+          'loggedBlogappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
       dispatch(setUser(user))
@@ -160,52 +161,54 @@ const App = () => {
 
   const loginForm = () => {
     return (
-      <Togglable buttonLabel={'Login'}>
-        <LoginForm
-          handleLogin={handleLogin}
-        />
-      </Togglable>
+        <Togglable buttonLabel={'Login'}>
+          <LoginForm
+              handleLogin={handleLogin}
+          />
+        </Togglable>
     )
   }
 
 
   const postForm = () => {
     return (
-      <Togglable buttonLabel={'Create new post'} ref={postFormRef}>
-        <PostForm
-          createPost={addPost}
-          token={user.token}
-        />
-      </Togglable>
+        <Togglable buttonLabel={'Create new post'} ref={postFormRef}>
+          <PostForm
+              createPost={addPost}
+              token={user.token}
+          />
+        </Togglable>
     )
   }
 
   const notificationContent = notification ? <Notification message={notification.message} /> : null
 
   return (
-    <div>
-      { notificationContent }
+      <div>
+        { notificationContent }
 
-      <BrowserRouter>
-        <NavigationMenu />
+        { user === null && <HomeLoggedOut loginForm={loginForm} /> }
+
+
+        {user && <NavigationMenu />}
+
+        {user &&
         <Routes>
-          {user === null
-              ? <Route path={'/'} element={<HomeLoggedOut loginForm={loginForm} />} />
-              : <Route path={'/'} element={<HomeLoggedIn
+          <Route path={'/'} element={<HomeLoggedIn
               user={user}
               handleLogout={handleLogout}
               postForm={postForm}
               posts={posts}
               deletePost={deletePost}
               likePost={likePost}
-              />} />
-          }
+          />} />
           <Route path={'/users'} element={<Users />} />
+          <Route path={'/users/:id'} element={<UserDetail />} />
         </Routes>
-      </BrowserRouter>
+        }
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
   )
 }
 
