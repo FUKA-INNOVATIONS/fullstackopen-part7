@@ -20,12 +20,11 @@ import SinglePost from './components/SinglePost'
 const HomeLoggedIn = (props) => {
   return (
       <div>
-        <p>{props.user.username} logged in <button onClick={props.handleLogout}>Logout</button></p>
-
-        {props.postForm()}
+        {/* <p>{props.user.username} logged in <button onClick={props.handleLogout}>Logout</button></p> */}
 
         <div>
           <h2>Blog posts</h2>
+          {props.postForm()}
           <ul style={ulStyle}>
             {props.posts.map(post =>
                 <Post key={post.id}
@@ -45,7 +44,7 @@ const HomeLoggedOut = (props) => {
   )
 }
 
-const NavigationMenu = () => {
+const NavigationMenu = (props) => {
   const paddingNav = {
     paddingRight: 5
   }
@@ -53,6 +52,7 @@ const NavigationMenu = () => {
       <div>
         <Link to='/' style={paddingNav}>Home</Link>
         <Link to='/users' style={paddingNav}>Users</Link>
+        {props.user.username} logged in <button onClick={props.handleLogout}>Logout</button>
       </div>
   )
 }
@@ -191,7 +191,7 @@ const App = () => {
         { user === null && <HomeLoggedOut loginForm={loginForm} /> }
 
 
-        {user && <NavigationMenu />}
+        {user && <NavigationMenu user={user} handleLogout={handleLogout} />}
 
         {user &&
         <Routes>
