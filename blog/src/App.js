@@ -8,10 +8,52 @@ import PostForm from './components/PostForm'
 import { Notification } from './components/Notification'
 import Togglable from './components/Togglable'
 import axios from 'axios'
+import { BrowserRouter, Routes, Route, NavLink, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { createMessage, resetMessage } from './reducers/notificationReducer'
 import { initPosts, addNewPost } from './reducers/postReducer'
 import { setUser } from './reducers/userReducer'
+import Users from './components/Users'
+
+const HomeLoggedIn = (props) => {
+  return (
+      <div>
+        <p>{props.user.username} logged in <button onClick={props.handleLogout}>Logout</button></p>
+
+        {props.postForm()}
+
+        <div>
+          <h2>Blog posts</h2>
+          <ul style={ulStyle}>
+            {props.posts.map(post =>
+                <Post key={post.id}
+                      post={post}
+                      deletePost={props.deletePost}
+                      likePost={props.likePost} />
+            )}
+          </ul>
+        </div>
+      </div>
+  )
+}
+
+const HomeLoggedOut = (props) => {
+  return (
+      props.loginForm()
+  )
+}
+
+const NavigationMenu = () => {
+  const paddingNav = {
+    paddingRight: 5
+  }
+  return (
+      <div>
+        <Link to='/' style={paddingNav}>Home</Link>
+        <Link to='/users' style={paddingNav}>Users</Link>
+      </div>
+  )
+}
 
 const App = () => {
   const posts = useSelector(state => state.posts)
@@ -144,28 +186,24 @@ const App = () => {
     <div>
       { notificationContent }
 
-      {user === null ?
-        loginForm()
-        :
-        <div>
-          <p>{user.username} logged in <button onClick={handleLogout}>Logout</button></p>
+      <BrowserRouter>
+        <NavigationMenu />
+        <Routes>
+          {user === null
+              ? <Route path={'/'} element={<HomeLoggedOut loginForm={loginForm} />} />
+              : <Route path={'/'} element={<HomeLoggedIn
+              user={user}
+              handleLogout={handleLogout}
+              postForm={postForm}
+              posts={posts}
+              deletePost={deletePost}
+              likePost={likePost}
+              />} />
+          }
+          <Route path={'/users'} element={<Users />} />
+        </Routes>
+      </BrowserRouter>
 
-          {postForm()}
-
-          <div>
-            <h2>Blog posts</h2>
-            <ul style={ulStyle}>
-              {posts.map(post =>
-                <Post key={post.id}
-                  post={post}
-                  deletePost={deletePost}
-                  likePost={likePost} />
-              )}
-            </ul>
-          </div>
-
-        </div>
-      }
       <Footer />
     </div>
   )
