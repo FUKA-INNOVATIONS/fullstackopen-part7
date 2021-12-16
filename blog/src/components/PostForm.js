@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Proptypes from 'prop-types'
+import { TextField, Button } from '@material-ui/core'
 
 
 const PostForm = ({ createPost }) => {
@@ -33,40 +34,46 @@ const PostForm = ({ createPost }) => {
 
   return (
     <form onSubmit={addPost}>
-      <label htmlFor="title">Title:</label><br />
-      <input
+      <TextField
+        label={'Title'}
         id={'titleInput'}
         type={'text'}
         onChange={handleTitleChange}
         value={newTitle}
       />
-      <br />
 
-      <label htmlFor="author">Author:</label><br />
-      <input
+      <TextField
+        label={'Author'}
         id={'authorInput'}
         type={'text'}
         onChange={handleAuthorChange}
         value={ newAuthor }
+        style={marginLeft}
       />
-      <br />
 
-      <label htmlFor="url">Url:</label><br />
-      <input
+
+      <TextField
+        label={'Website'}
         id={'urlInput'}
         type={'text'}
         onChange={handleUrlChange}
         value={ newUrl }
+        style={marginLeft}
       />
+      <Button id={'savePost'} type="submit" variant={'contained'} color={'secondary'}>save</Button>
       <br />
 
-      <button id={'savePost'} type="submit">save</button>
+
     </form>
   )
 }
 
 PostForm.propTypes = {
   createPost: Proptypes.func.isRequired
+}
+
+const marginLeft = {
+  marginLeft: 20
 }
 
 export default PostForm

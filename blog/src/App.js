@@ -17,6 +17,20 @@ import Users from './components/Users'
 import UserDetail from './components/UserDetail'
 import SinglePost from './components/SinglePost'
 
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  Icon,
+  Button,
+  AppBar,
+  Toolbar,
+} from '@material-ui/core';
+
 const HomeLoggedIn = (props) => {
   return (
       <div>
@@ -24,6 +38,28 @@ const HomeLoggedIn = (props) => {
 
         <div>
           <h2>Blog posts</h2>
+          {props.postForm()}
+          <TableContainer component={Paper}>
+            <Table>
+              <TableBody>
+                {props.posts.map(post => (
+                    <TableRow key={post.id}>
+                      <TableCell>
+                        <Link to={`/posts/${post.id}`}>{post.title.toUpperCase()}</Link>
+                      </TableCell>
+                      <TableCell title={'aa'}>
+                        {post.author}
+                      </TableCell>
+                      <TableCell>
+                        {post.likes} likes
+                      </TableCell>
+                    </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+        <div style={{display: 'none'}}>
           {props.postForm()}
           <ul style={ulStyle}>
             {props.posts.map(post =>
@@ -50,9 +86,17 @@ const NavigationMenu = (props) => {
   }
   return (
       <div>
-        <Link to='/' style={paddingNav}>Home</Link>
-        <Link to='/users' style={paddingNav}>Users</Link>
-        {props.user.username} logged in <button onClick={props.handleLogout}>Logout</button>
+        <AppBar position={'static'}>
+          <Toolbar>
+            <Button color={'inherit'} component={Link} to={'/'}>Home</Button>
+            <Button color={'inherit'} component={Link} to={'/users'}>Users</Button>
+            <div style={{ right: 10, position: 'absolute' }}>
+              <em>{props.user.username} logged in</em>
+              {props.user && <Button style={{ marginLeft: 20 }}  variant={'outlined'}  onClick={props.handleLogout}>Logout</Button>}
+            </div>
+          </Toolbar>
+        </AppBar>
+
       </div>
   )
 }
@@ -162,11 +206,11 @@ const App = () => {
 
   const loginForm = () => {
     return (
-        <Togglable buttonLabel={'Login'}>
+
           <LoginForm
               handleLogin={handleLogin}
           />
-        </Togglable>
+
     )
   }
 
@@ -185,32 +229,34 @@ const App = () => {
   const notificationContent = notification ? <Notification message={notification.message} /> : null
 
   return (
-      <div>
-        { notificationContent }
+      <Container>
+        <div>
+          { notificationContent }
 
-        { user === null && <HomeLoggedOut loginForm={loginForm} /> }
+          { user === null && <HomeLoggedOut loginForm={loginForm} /> }
 
 
-        {user && <NavigationMenu user={user} handleLogout={handleLogout} />}
+          {user && <NavigationMenu user={user} handleLogout={handleLogout} />}
 
-        {user &&
-        <Routes>
-          <Route path={'/'} element={<HomeLoggedIn
-              user={user}
-              handleLogout={handleLogout}
-              postForm={postForm}
-              posts={posts}
-              deletePost={deletePost}
-              likePost={likePost}
-          />} />
-          <Route path={'/users'} element={<Users />} />
-          <Route path={'/users/:id'} element={<UserDetail />} />
-          <Route path={'/posts/:id'} element={<SinglePost likePost={likePost} />} />
-        </Routes>
-        }
+          {user &&
+          <Routes>
+            <Route path={'/'} element={<HomeLoggedIn
+                user={user}
+                handleLogout={handleLogout}
+                postForm={postForm}
+                posts={posts}
+                deletePost={deletePost}
+                likePost={likePost}
+            />} />
+            <Route path={'/users'} element={<Users />} />
+            <Route path={'/users/:id'} element={<UserDetail />} />
+            <Route path={'/posts/:id'} element={<SinglePost likePost={likePost} />} />
+          </Routes>
+          }
 
-        <Footer />
-      </div>
+          <Footer />
+        </div>
+      </Container>
   )
 }
 

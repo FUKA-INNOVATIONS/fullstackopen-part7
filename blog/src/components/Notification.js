@@ -1,13 +1,14 @@
+import { Alert } from '@material-ui/lab'
+
 const Notification = ( { message } ) => {
   if ( message === null ) {
     return null
   }
 
   return (
-      // eslint-disable-next-line react/react-in-jsx-scope
-      <div style={ message.type === 'error' ? errorStyle : successStyle }>
-        { message.content }
-      </div>
+        <Alert style={{marginBottom: 30}} severity={message.type}>
+          {message.content}
+        </Alert>
   )
 }
 

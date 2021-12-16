@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getUsers } from '../reducers/userReducer'
 import React, { useEffect } from 'react'
+import { Button } from '@material-ui/core'
 
 const SinglePost = ({ likePost }) => {
   const dispatch = useDispatch()
@@ -37,12 +38,12 @@ const SinglePost = ({ likePost }) => {
       <div>
         <br />
         <h3>{post.title}</h3>
-        <a href={post.url}>{`http://${post.url}`}</a>
+        <a href={ `http://${post.url}` }>{`http://${post.url}`}</a>
         <p>
           {post.likes} likes
-          <button id={'likeBtn'} style={marginLeft} onClick={() => handleLike(post.id, post.likes)}>Like</button>
+          <Button variant={'outlined'} color={'secondary'} id={'likeBtn'} style={marginLeft} onClick={() => handleLike(post.id, post.likes)}>Like</Button>
         </p>
-        <i>added by <b>{post.author}</b></i>
+        <p>added by {post.author}</p>
 
         <ul>
 
